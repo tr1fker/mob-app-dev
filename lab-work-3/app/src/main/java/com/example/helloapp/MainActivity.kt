@@ -199,52 +199,52 @@
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
-////        setContent @OptIn(ExperimentalFoundationApi::class){
-////            val people = listOf(
-////                Person("Tom", "Microsoft"), Person("Alice", "Microsoft"),
-////                Person("Bob", "Google"), Person("Sam", "JetBrains"),
-////                Person("Kate", "Google"), Person("Mark", "Google"),
-////                Person("Bill", "Microsoft"), Person("Sandra", "JetBrains"),
-////                Person("Lisa", "Apple"), Person("Alex", "Apple")
-////            )
-////            val groups = people.groupBy { it.company }
-////            LazyColumn(
-////                contentPadding = PaddingValues(5.dp)
-////            ){
-////                groups.forEach { (company, employees) ->
-////                    stickyHeader {
-////                        Text(
-////                            text = company,
-////                            fontSize = 28.sp,
-////                            color = Color.White,
-////                            modifier =
-////                                Modifier.background(Color.Gray).padding(5.dp).fillMaxWidth()
-////                        )
-////                    }
-////                    items(employees) { employee ->
-////                        Text(employee.name, Modifier.padding(5.dp), fontSize =
-////                            28.sp)
-////                    }
-////                }
-////            }
-////        }
-//        ////anim
-//        setContent {
-//            val startOffset = 0
-//            val endOffset = 300
-//            val boxWidth = 150
-//            var boxState by remember { mutableStateOf(startOffset)}
-//            val offset by animateDpAsState(targetValue = boxState.dp)
-//            Column(Modifier.fillMaxWidth()) {
-//                Box(Modifier.padding(start=offset)
-//                    .size(boxWidth.dp)
-//                    .background(Color.DarkGray))
-//                Button({boxState = if (boxState==startOffset){endOffset} else {startOffset}},
-//                    Modifier.padding(10.dp)) {
+//        setContent @OptIn(ExperimentalFoundationApi::class){
+//            val people = listOf(
+//                Person("Tom", "Microsoft"), Person("Alice", "Microsoft"),
+//                Person("Bob", "Google"), Person("Sam", "JetBrains"),
+//                Person("Kate", "Google"), Person("Mark", "Google"),
+//                Person("Bill", "Microsoft"), Person("Sandra", "JetBrains"),
+//                Person("Lisa", "Apple"), Person("Alex", "Apple")
+//            )
+//            val groups = people.groupBy { it.company }
+//            LazyColumn(
+//                contentPadding = PaddingValues(5.dp)
+//            ){
+//                groups.forEach { (company, employees) ->
+//                    stickyHeader {
+//                        Text(
+//                            text = company,
+//                            fontSize = 28.sp,
+//                            color = Color.White,
+//                            modifier =
+//                                Modifier.background(Color.Gray).padding(5.dp).fillMaxWidth()
+//                        )
+//                    }
+//                    items(employees) { employee ->
+//                        Text(employee.name, Modifier.padding(5.dp), fontSize =
+//                            28.sp)
+//                    }
 //                }
 //            }
-//                    Text("Move", fontSize = 25.sp)
 //        }
+//        ////anim
+////        setContent {
+////            val startOffset = 0
+////            val endOffset = 300
+////            val boxWidth = 150
+////            var boxState by remember { mutableStateOf(startOffset)}
+////            val offset by animateDpAsState(targetValue = boxState.dp)
+////            Column(Modifier.fillMaxWidth()) {
+////                Box(Modifier.padding(start=offset)
+////                    .size(boxWidth.dp)
+////                    .background(Color.DarkGray))
+////                Button({boxState = if (boxState==startOffset){endOffset} else {startOffset}},
+////                    Modifier.padding(10.dp)) {
+////                }
+////            }
+////                    Text("Move", fontSize = 25.sp)
+////        }
 //    }
 //}
 //data class Person(val name:String, val company: String)
@@ -256,11 +256,16 @@ package com.example.helloapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
@@ -312,6 +317,7 @@ fun Main() {
         = Modifier.weight(1f)) {
             composable(NavRoutes.Home.route) { Home() }
             composable(NavRoutes.Menu.route) { Menu()  }
+            composable(NavRoutes.Image.route) { Image() }
         }
         BottomNavigationBar(navController = navController)
     }
@@ -358,6 +364,11 @@ object NavBarItems {
             title = "Lists",
             image = Icons.Filled.Menu,
             route = "Menu"
+        ),
+        BarItem(
+            title = "Image",
+            image = Icons.Filled.Face,
+            route = "image"
         )
     )
 }
@@ -404,14 +415,45 @@ fun Home(modifier: Modifier = Modifier){
         }
     }
 }
+
+@Composable
+fun Image(modifier: Modifier = Modifier){
+
+}
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Menu(){
-    Text("Lista Page", fontSize = 30.sp)
+    val cars = listOf(
+        Car("Camry", "Toyota"), Car("Corolla", "Toyota"), Car("RAV4", "Toyota"),
+        Car("Accord", "Honda"), Car("Civic", "Honda"), Car("CR-V", "Honda"),
+        Car("Mustang", "Ford"), Car("Focus", "Ford"), Car("F-150", "Ford"), Car("Explorer", "Ford")
+    )
+    val groups = cars.groupBy { it.company }
+    LazyColumn(
+        contentPadding = PaddingValues(5.dp)
+    ){
+        groups.forEach { (company, employees) ->
+            stickyHeader {
+                Text(
+                    text = company,
+                    fontSize = 28.sp,
+                    color = Color.White,
+                    modifier =
+                        Modifier.background(Color.Gray).padding(5.dp).fillMaxWidth()
+                )
+            }
+            items(employees) { employee ->
+                Text(employee.name, Modifier.padding(5.dp), fontSize =
+                    28.sp)
+            }
+        }
+    }
 }
-
+data class Car(val name:String, val company: String)
 sealed class NavRoutes(val route: String) {
     object Home : NavRoutes("home")
     object Menu : NavRoutes("menu")
+    object Image : NavRoutes("image")
 }
 
 @Preview(showBackground = true, showSystemUi = true)
