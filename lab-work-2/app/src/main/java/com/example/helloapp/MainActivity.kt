@@ -177,25 +177,168 @@
 //-----------------------------3
 
 
+//package com.example.helloapp
+//import android.os.Bundle
+//import androidx.activity.ComponentActivity
+//import androidx.activity.compose.setContent
+//import androidx.compose.foundation.layout.Column
+//import androidx.compose.foundation.layout.padding
+//import androidx.compose.material.icons.Icons
+//import androidx.compose.material.icons.filled.Face
+//import androidx.compose.material.icons.filled.Home
+//import androidx.compose.material.icons.filled.Info
+//
+//import androidx.compose.material3.Icon
+//import androidx.compose.material3.NavigationBar
+//import androidx.compose.material3.NavigationBarItem
+//import androidx.compose.material3.Text
+//import androidx.compose.runtime.Composable
+//import androidx.compose.runtime.getValue
+//import androidx.compose.ui.Modifier
+//import androidx.compose.ui.graphics.vector.ImageVector
+//import androidx.compose.ui.unit.dp
+//import androidx.compose.ui.unit.sp
+//import androidx.navigation.NavController
+//import androidx.navigation.NavGraph.Companion.findStartDestination
+//import androidx.navigation.compose.NavHost
+//import androidx.navigation.compose.composable
+//import androidx.navigation.compose.currentBackStackEntryAsState
+//import androidx.navigation.compose.rememberNavController
+//
+//
+//class MainActivity : ComponentActivity() {
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//            Main()
+//        }
+//    }
+//}
+//@Composable
+//fun Main() {
+//    val navController = rememberNavController()
+//    Column(Modifier.padding(8.dp)) {
+//        NavHost(navController, startDestination = NavRoutes.Home.route, modifier
+//        = Modifier.weight(1f)) {
+//            composable(NavRoutes.Home.route) { Home() }
+//            composable(NavRoutes.Contacts.route) { Contacts()  }
+//            composable(NavRoutes.About.route) { About() }
+//        }
+//        BottomNavigationBar(navController = navController)
+//    }
+//}
+//
+//@Composable
+//fun BottomNavigationBar(navController: NavController) {
+//    NavigationBar {
+//        val backStackEntry by navController.currentBackStackEntryAsState()
+//        val currentRoute = backStackEntry?.destination?.route
+//
+//        NavBarItems.BarItems.forEach { navItem ->
+//            NavigationBarItem(
+//                selected = currentRoute == navItem.route,
+//                onClick = {
+//                    navController.navigate(navItem.route) {
+//                        popUpTo(navController.graph.findStartDestination().id)
+//                        {saveState = true}
+//                        launchSingleTop = true
+//                        restoreState = true
+//                    }
+//                },
+//                icon = {
+//                    Icon(imageVector = navItem.image,
+//                        contentDescription = navItem.title)
+//                },
+//                label = {
+//                    Text(text = navItem.title)
+//                }
+//
+//            )
+//        }
+//    }
+//}
+//
+//object NavBarItems {
+//    val BarItems = listOf(
+//        BarItem(
+//            title = "Home",
+//            image = Icons.Filled.Home,
+//            route = "home"
+//        ),
+//        BarItem(
+//            title = "Contacts",
+//            image = Icons.Filled.Face,
+//            route = "contacts"
+//        ),
+//        BarItem(
+//            title = "About",
+//            image = Icons.Filled.Info,
+//            route = "about"
+//        )
+//    )
+//}
+//
+//data class BarItem(
+//    val title: String,
+//    val image: ImageVector,
+//    val route: String
+//)
+//
+//@Composable
+//fun Home(){
+//    Text("Home Page", fontSize = 30.sp)
+//}
+//@Composable
+//fun Contacts(){
+//    Text("Contact Page", fontSize = 30.sp)
+//}
+//@Composable
+//fun About(){
+//    Text("About Page", fontSize = 30.sp)
+//}
+//
+//sealed class NavRoutes(val route: String) {
+//    object Home : NavRoutes("home")
+//    object Contacts : NavRoutes("contacts")
+//    object About : NavRoutes("about")
+//}
+
+//-----------------------------------------individual task
+
 package com.example.helloapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Button
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -222,8 +365,7 @@ fun Main() {
         NavHost(navController, startDestination = NavRoutes.Home.route, modifier
         = Modifier.weight(1f)) {
             composable(NavRoutes.Home.route) { Home() }
-            composable(NavRoutes.Contacts.route) { Contacts()  }
-            composable(NavRoutes.About.route) { About() }
+            composable(NavRoutes.Menu.route) { Menu()  }
         }
         BottomNavigationBar(navController = navController)
     }
@@ -267,14 +409,9 @@ object NavBarItems {
             route = "home"
         ),
         BarItem(
-            title = "Contacts",
-            image = Icons.Filled.Face,
-            route = "contacts"
-        ),
-        BarItem(
-            title = "About",
-            image = Icons.Filled.Info,
-            route = "about"
+            title = "Lists",
+            image = Icons.Filled.Menu,
+            route = "Menu"
         )
     )
 }
@@ -286,20 +423,53 @@ data class BarItem(
 )
 
 @Composable
-fun Home(){
+fun Home(modifier: Modifier = Modifier){
     Text("Home Page", fontSize = 30.sp)
+    Column (modifier = modifier
+        .fillMaxSize()
+        .background(Color(0xFF2196F3)),
+        horizontalAlignment = Alignment.CenterHorizontally){
+
+        var MyName by remember {mutableStateOf("Student")}
+        var textValue by remember {mutableStateOf("")}
+
+        Text(
+            text = "Hello $MyName!",
+            modifier = modifier.padding(16.dp),
+            fontSize = 48.sp
+        )
+        Image(
+            painter = painterResource(id = R.drawable.student_img),
+            contentDescription = "Hello Student Image"
+        )
+        TextField(
+            value = textValue,
+            onValueChange = {textValue = it},
+            label = { Text(text = "Введите имя")},
+            placeholder = {Text(text = "Student")},
+            modifier = modifier.padding(4.dp)
+        )
+        Button(
+            onClick = {
+                MyName = textValue
+            }
+        ) {
+            Text(text = "Приветствовать")
+        }
+    }
 }
 @Composable
-fun Contacts(){
-    Text("Contact Page", fontSize = 30.sp)
-}
-@Composable
-fun About(){
-    Text("About Page", fontSize = 30.sp)
+fun Menu(){
+    Text("Lista Page", fontSize = 30.sp)
 }
 
 sealed class NavRoutes(val route: String) {
     object Home : NavRoutes("home")
-    object Contacts : NavRoutes("contacts")
-    object About : NavRoutes("about")
+    object Menu : NavRoutes("menu")
+}
+
+@Preview(showBackground = true, showSystemUi = true)
+@Composable
+fun GreetingPreview() {
+    Main()
 }
